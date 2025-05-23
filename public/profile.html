@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Profilim</title>
+  <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+
+    <nav class="navbar"> 
+        <div class="navbar-left">
+            <a href="../homepage.html">Gridea Forum</a>
+           
+        </div>
+    
+        <div class="navbar-right">
+            <div class="user-area">
+                <a href="../login.html"  class="btn">Giriş Yap</a>
+            </div>
+            <div class="write-area">
+                <a href="../addPost.html"  class="btn">Yaz</a>
+            </div>
+            
+        </div>
+    </nav>
+
+    
+    <div class="profile-header">
+        <div class="avatar"></div>
+        <h2 id="username">👤 Kullanıcı Adı</h2>
+        <p id="joined-date">📅 Katılım Tarihi: ...</p>
+    </div>
+
+    <div class="user-posts">
+        <h3>📚 Yazılarım</h3>
+        <ul id="user-post-list">
+        <li>Yazılar yükleniyor...</li>
+        </ul>
+    </div>
+
+  
+
+  <script>
+    async function loadUserData() {
+      const sessionRes = await fetch('/session-info');
+      const session = await sessionRes.json();
+
+      if (!session.loggedIn) {
+        window.location.href = '/login.html';
+        return;
+      }
+
+      document.getElementById('username').textContent = `👤 ${session.user.username}`;
+
+      // Katılım tarihi varsayımsal olarak hesaplanıyor (gerekirse db'den çekilebilir)
+      document.getElementById('joined-date').textContent = `📅 Katılım Tarihi: 2025`;
+
+      // Yazıları getir
+      const postsRes = await fetch('/posts');
+      const posts = await postsRes.json();
+      const list = document.getElementById('user-post-list');
+      list.innerHTML = '';
+
+      const userPosts = posts.filter(post => post.user_id === session.user.id);
+
+      if (userPosts.length === 0) {
+        list.innerHTML = '<li>Henüz bir yazı paylaşmadınız.</li>';
+        return;
+      }
+
+      userPosts.forEach(post => {
+        const li = document.createElement('li');
+        li.innerHTML = `<a href="/post.html?id=${post.id}">${post.title}</a>`;
+        list.appendChild(li);
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', loadUserData);
+  </script>
+
+    <script src="/navbar.js"></script>
+
+    <footer class="footer">
+        <p>© 2025 Gridea Forum. Tüm Hakları Saklıdır.</p>
+    </footer>
+</body>
+</html>

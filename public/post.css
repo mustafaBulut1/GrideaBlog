@@ -1,0 +1,116 @@
+body {
+    background-color: #A0CED9;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Ana post kutusu ortalı ve şık görünüm */
+#post-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    
+}
+
+/* Görseli sabit yüksekliğe kırp */
+#post-container img {
+    width: 100%;
+    max-height: 350px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Başlık */
+#post-container h2 {
+    font-size: 26px;
+    margin-top: 20px;
+    color: #222;
+}
+
+/* Paragraflar */
+#post-container p {
+    font-size: 16px;
+    color: #444;
+    margin: 10px 0;
+}
+
+/* Beğeni butonu */
+#post-container button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#post-container button:hover {
+    background-color: #e60000;
+}
+
+/* Beğeni sayacı */
+#like-count {
+    font-weight: bold;
+    margin-left: 12px;
+    color: #555;
+}
+
+
+
+.navbar {
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 50px;  /* Sağ ve soldan boşluk */
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+    height: 70px; /* (opsiyonel) navbar yüksekliğini sabitlemek için */
+}
+
+
+.navbar-left a {
+    text-decoration: none;
+    font-size: 30px;
+    color: #333;
+}
+
+.navbar-right {
+    display: flex;
+    gap: 10px;
+}
+
+.navbar-right .btn {
+    display: inline-block;
+    padding: 10px 20px; /* giriş yap ve yaz a üstten ve yanlardan boşluk kattık  1. alt üst 2. yan*/
+    background-color: #e0f7fa;
+    color: #333;
+    text-decoration: none;
+    border-radius: 20px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    font-size: 18px; /* Yazı büyüklüğü arttı */
+}
+
+.navbar-right .btn:hover {
+    background-color: #b2ebf2;
+}
+
+
+
+.footer {
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    background-color: #f5f5f5;
+    color: #555;
+    font-size: 14px;
+    border-top: 1px solid #ddd;
+    margin-top: 50px; /* Ana içerikten biraz boşluk bırakır */
+}

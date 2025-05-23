@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blogu Düzenle</title>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet"  />
+
+    <link rel="stylesheet" href="editPost.css">
+    <style>
+        body {
+          font-family: Arial;
+          padding: 40px;
+          max-width: 700px;
+          margin: auto;
+          background-color: #f9f9f9;
+        }
+    
+        h2 {
+          margin-bottom: 20px;
+        }
+    
+        input, select, button {
+          display: block;
+          width: 100%;
+          margin-top: 15px;
+          padding: 10px;
+          font-size: 16px;
+        }
+    
+        #editor {
+          height: 250px;
+          background: #fff;
+          margin-top: 15px;
+        }
+    
+        button {
+          background-color: #007bff;
+          color: white;
+          border: none;
+          cursor: pointer;
+        }
+    
+        button:hover {
+          background-color: #0056b3;
+        }
+      </style>
+</head>
+<body>
+  <nav class="navbar"> 
+    <div class="navbar-left">
+        <a href="../homepage.html">Gridea Forum</a>
+       
+    </div>
+
+    <div class="navbar-right">
+        <div class="user-area">
+            <a href="../login.html"  class="btn">Giriş Yap</a>
+        </div>
+        <div class="write-area">
+            <a href="../addPost.html"  class="btn">Yaz</a>
+        </div>
+        
+    </div>
+  </nav>
+    
+    <h2>Blog Yazısını Düzenle</h2>
+
+    <input type="text" id="title" placeholder="Başlık" />
+    <select id="category">
+        <option value="Art">Art</option>
+        <option value="Science">Science</option>
+        <option value="Design">Design</option>
+        <option value="Food">Food</option>
+        <option value="Cinema">Cinema</option>
+        <option value="Technology">Technology</option>
+    </select>
+
+    <div id="editor" ></div>
+
+    <button onclick="updatePost()">Güncelle</button>
+
+    <script src="https://cdn.quilljs.com/1.3.7/quill.js"></script>
+
+
+    <script>
+
+        const quill = new Quill('#editor', {theme: 'snow'});
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+
+        async function loadPost(){
+            if(!id){
+                alert("Yazı idsi bulunamadı");
+                return;
+            }
+
+            try{
+                const response = await fetch(`/post/${id}`);
+
+                if(!response.ok){
+                    throw new Error("Yazı Getirilemedi");
+                }
+
+                const post = await response.json();
+
+                document.getElementById('title').value = post.title;
+                document.getElementById('category').value= post.category;
+                quill.root.innerHTML= post.content;
+
+            }catch(error){
+                alert("Yazı yüklenirken hata oluştu");
+                console.error(error);
+            }
+        }
+
+        async function updatePost() {
+            const title = document.getElementById('title').value;
+            const category = document.getElementById('category').value;
+            const content = quill.root.innerHTML;
+
+            const response = await fetch(`/post/${id}`, {
+                method:'PUT',
+                 headers:{
+                    'Content-Type' : 'application/json'
+                    },
+                 body: JSON.stringify({title , category ,content}) 
+            });
+
+            if(response.ok){
+                alert("Yazı güncellendi.");
+                window.location.href=  `/post.html?id=${id}`;
+            }else{
+                alert("Güncelleme başarısız ");
+            }
+
+        }
+
+        window.addEventListener('DOMContentLoaded', loadPost);
+    </script>
+
+  <script src="/navbar.js"></script>
+
+
+  <footer class="footer">
+    <p>© 2025 Gridea Forum. Tüm Hakları Saklıdır.</p>
+  </footer>
+</body>
+</html>
