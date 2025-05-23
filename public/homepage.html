@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GrideaForum</title>
+    <link rel="stylesheet" href="homepage.css">
+</head>
+<body>
+    <nav class="navbar"> 
+        <div class="navbar-left">
+            <a href="../homepage.html">Gridea Forum</a>
+           
+        </div>
+
+        <div class="navbar-right">
+            <div class="user-area">
+                <a href="../login.html"  class="btn">Giriş Yap</a>
+            </div>
+            <div class="write-area">
+                <a href="../addPost.html"  class="btn">Yaz</a>
+            </div>
+                
+        </div>
+    </nav>
+
+    <div id="posts"></div>
+
+    <script>
+
+        fetch('/session-info').then(res=>res.json()).then(data=>{
+            const userArea = document.querySelector('.user-area');
+            
+            if(data.loggedIn){
+                userArea.innerHTML=`
+                    <span style="margin-right: 10px;">👤 ${data.user.username}</span>
+                    <a href="/profile.html" class="btn">Profilim</a>
+                    <a href="/logout" class="btn">Çıkış Yap</a>
+                `;
+            }else{
+                userArea.innerHTML=`
+                    <a href="/login.html" class="btn">Giriş Yap</a>
+                `;
+            }
+            
+            /*
+            const usernameSpan= document.createElement('span');
+            usernameSpan.textContent= `👤 ${data.username}`;
+            
+            const logoutLink = document.createElement('a');
+            logoutLink.textContent='Çıkış Yap';
+            logoutLink.href= '/logout';
+            logoutLink.className='btn';
+
+            userArea.appendChild(usernameSpan);
+            userArea.appendChild(logoutLink);
+            */
+
+        });
+
+        async function fetchPosts() {
+            try {
+                const response = await fetch('/posts');  // Sunucudan veri çek
+                const posts = await response.json();      // JSON'a çevir
+                console.log(posts);  // Kontrol için verileri yaz
+    
+                const postsDiv = document.getElementById('posts');  // ID'si "posts" olan div
+                postsDiv.innerHTML = '';  // Öncekileri temizle
+    
+                posts.forEach(post => {
+                    const blogCard = document.createElement('div');
+                    blogCard.className = 'blog-card';
+    
+                    blogCard.innerHTML = `
+                        <div class="blog-image">
+                            <img src="/media/${post.category}.jpg" alt="${post.category}">
+                        </div>
+                        <div class="blog-content">
+                            <h2>${post.title}</h2>
+                            <p>${post.content.substring(0, 150).replace(/<[^>]+>/g, '')}...</p>
+                            <a href="/post.html?id=${post.id}" class="read-more">Devamını Oku</a>
+                        </div>
+                        
+                    `;
+
+    
+                    postsDiv.appendChild(blogCard);
+                });
+    
+            } catch (error) {
+                console.error('Postları çekerken hata oluştu:', error);
+            }
+        }
+    
+        // Sayfa yüklenince fetchPosts çalışsın
+        window.addEventListener('DOMContentLoaded', fetchPosts);
+    </script>
+    
+
+
+
+    <footer class="footer">
+        <p>© 2025 Gridea Forum. Tüm Hakları Saklıdır.</p>
+    </footer>
+    
+    
+</body>
+</html>
